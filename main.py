@@ -1,29 +1,33 @@
-values = [100, 30, 40, 500]
-weights = [10, 3, 20, 50]
-capacity = 40
-n = len(values)
+import random
 
-def backpack(values, weights, capacity, n):
-   
-    # base case: no items left or no remaining capacity 
-    if n == 0 or capacity == 0:
+weights = [2, 3, 5, 7, 9]
+values  = [6, 5, 8, 9, 10]
+capacity = 15
+
+NUMBER_OF_GENES = len(weights)
+POPULATION_SIZE = 10
+MUTATION_RATE = 0.1
+GENERATIONS = 50
+
+
+def random_individual():
+    return [random.randint(0, 1) for _ in range(NUMBER_OF_GENES)]
+
+def random_population():
+    return [random_individual() for _ in range(POPULATION_SIZE)]
+
+def fitness(individual):
+    total_weight = 0
+    total_value = 0
+
+    for gene, w, v in zip(individual, weights, values):
+        if gene == 1:
+            total_weight += w
+            total_value += v
+
+    if total_weight > capacity:
         return 0
 
-    # skip current item if it doesn't fit
-    if weights[n-1] > capacity:
-        return backpack(values, weights, capacity, n-1)
+    return total_value
 
-    # recursive call: try both posibilities
-    else:
-        
-        # case 1: include current item
-        include = values[n-1] + backpack(values, weights, capacity - weights[n-1], n-1)
-
-        # case 2: exclude current item (explore other combinations) 
-        exclude = backpack(values, weights, capacity, n-1)
-
-        # return better option
-        return max(include, exclude)
-
-
-print(backpack(values, weights, capacity, n))
+print(fitness(random_individual()))
