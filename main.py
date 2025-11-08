@@ -50,12 +50,12 @@ def one_point_crossover(parent1, parent2):
     child2 = parent2[:point] + parent1[point:]
     return child1, child2
 
-p1 = [1, 0, 1, 1, 0]
-p2 = [0, 1, 0, 0, 1]
+def mutate(individual):
+    for i in range(NUMBER_OF_GENES):
+        if random.random() < MUTATION_RATE:
+            individual[i] = 1 - individual[i]
+    return individual
 
-c1, c2 = one_point_crossover(p1, p2)
-print("p1:", p1)
-print("p2:", p2)
-print("c1:", c1)
-print("c2:", c2)
-
+ind = [1, 0, 1, 0, 1]
+print("before:", ind)
+print("after:", mutate(ind.copy()))
