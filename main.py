@@ -30,6 +30,9 @@ def fitness(individual):
 
     return total_value
 
+def fitnesses(population):
+    return [fitness(individual) for individual in population]
+
 def roulette_selection(population, fitnesses):
     total_fitness = sum(fitnesses)
     if total_fitness == 0:
@@ -56,6 +59,5 @@ def mutate(individual):
             individual[i] = 1 - individual[i]
     return individual
 
-ind = [1, 0, 1, 0, 1]
-print("before:", ind)
-print("after:", mutate(ind.copy()))
+pop = random_population()
+print("sample population fitnesses:", fitnesses(pop))
