@@ -59,5 +59,20 @@ def mutate(individual):
             individual[i] = 1 - individual[i]
     return individual
 
-pop = random_population()
-print("sample population fitnesses:", fitnesses(pop))
+def copy_individual(ind):
+    return ind[:]
+
+# --- init population ---
+population = random_population()
+fitness_values = fitnesses(population)
+
+# --- find best individual in first population ---
+best_idx = fitness_values.index(max(fitness_values))
+best_individual = copy_individual(population[best_idx])
+best_fitness = fitness_values[best_idx]
+
+print("=== Genetic Algorithm for Knapsack ===")
+print(f"Items: {NUMBER_OF_GENES}, Capacity: {capacity}")
+print(f"Population size: {POPULATION_SIZE}, Generations: {GENERATIONS}")
+print(f"Initial best fitness: {best_fitness}")
+print("-" * 50)
