@@ -9,7 +9,6 @@ POPULATION_SIZE = 10
 MUTATION_RATE = 0.1
 GENERATIONS = 50
 
-
 def random_individual():
     return [random.randint(0, 1) for _ in range(NUMBER_OF_GENES)]
 
@@ -76,3 +75,38 @@ print(f"Items: {NUMBER_OF_GENES}, Capacity: {capacity}")
 print(f"Population size: {POPULATION_SIZE}, Generations: {GENERATIONS}")
 print(f"Initial best fitness: {best_fitness}")
 print("-" * 50)
+
+# --- main evolution loop ---
+for generation in range(1, GENERATIONS + 1):
+    new_population = []
+
+    while len(new_population) < POPULATION_SIZE:
+        parent1 = roulette_selection(population, fitness_values)
+        parent2 = roulette_selection(population, fitness_values)
+
+        child1, child2 = one_point_crossover(parent1, parent2)
+
+        child1 = mutate(child1)
+        child2 = mutate(child2)
+
+        new_population.append(child1)
+        if len(new_population) < POPULATION_SIZE:
+            new_population.append(child2)
+
+    population = new_population
+    fitness_values = fitnesses(population)
+
+    # --- Elitism keep the best individual so far ---
+    current_best_fitness = max(fitness_values)
+    if current_best_fitness > best_fitness:
+        best_idx = fitness_values.index(current_best_fitness)
+        best_individual = copy_individual(population[best_idx])
+        best_fitness = current_best_fitness
+
+    # --- replace worst with best (stronger elitism) ---
+    worst_idx = fitness_values.index(min(fitness_values))
+    if best_fitness > fitness_values[worst_idx]:
+        population[worst_idx] = copy_individual(best_individual)
+        fitness_values[worst_idx] = best_fitness
+
+    print(f"Gen {generation:2d} | Best: {best_fitness}")
